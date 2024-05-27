@@ -17,7 +17,7 @@ function ProfileLinks({ user }: { user: User }) {
       href={href}
       className={buttonVariants({
         variant: isActive ? "secondary" : "ghost",
-        className: "navLink",
+        className: "sideLink",
         size: "lg",
       })}
     >

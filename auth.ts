@@ -9,7 +9,7 @@ import {
 } from "next";
 
 export const config = {
-  secret: process.env.AUTH_SECRET!,
+  secret: process.env.NEXTAUTH_SECRET!,
   pages: {
     signIn: "/login",
   },

@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 import { useTheme } from "next-themes";
+import { signOut } from "next-auth/react";
 
 function SideDropdown() {
   const [open, setOpen] = useState(false);
@@ -92,9 +93,11 @@ function SideDropdown() {
               <Moon size={20} />
               <DropdownMenuLabel>Switch appearance</DropdownMenuLabel>
             </DropdownMenuItem>
-            <DropdownMenuItem className="sideDropdownMenu">
+            <DropdownMenuItem
+              className="sideDropdownMenu"
+              onClick={() => signOut()}
+            >
               <LogOut size={20} />
-              {/* Do this later on */}
               <DropdownMenuLabel>Log out</DropdownMenuLabel>
             </DropdownMenuItem>
           </>
