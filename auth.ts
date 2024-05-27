@@ -53,7 +53,7 @@ export const config = {
             id: prismaUser.id,
           },
           data: {
-            username: prismaUser.name?.split(" ").join(" ").toLowerCase(),
+            username: prismaUser.name?.split(" ").join("").toLowerCase(),
           },
         });
       }
