@@ -1,5 +1,6 @@
-import { Search } from "lucide-react";
+import { Heart, Search } from "lucide-react";
 import Link from "next/link";
+import { Button } from "./ui/button";
 
 function Header() {
   return (
@@ -17,6 +18,10 @@ function Header() {
             className="bg-transparent placeholder:text-neutral-600 dark:placeholder:text-neutral-400 flex-1 outline-none"
           />
         </div>
+
+        <Button size={"icon"} variant={"ghost"}>
+          <Heart />
+        </Button>
       </div>
     </header>
   );
