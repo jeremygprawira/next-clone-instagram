@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import useMount from "@/hooks/useMount";
+import useMount from "@/hooks/useMount";
 // import { createPost } from "@/lib/actions";
 // import { CreatePost } from "@/lib/schemas";
 // import { UploadButton } from "@/lib/uploadthing";
@@ -35,6 +35,10 @@ function CreatePage() {
   const pathname = usePathname();
   const isCreatePage = pathname === "/dashboard/create";
   const router = useRouter();
+  const mount = useMount();
+
+  if (!mount) return null;
+
   return (
     <div>
       <Dialog
@@ -45,6 +49,10 @@ function CreatePage() {
           <DialogHeader>
             <DialogTitle>Create a new post</DialogTitle>
           </DialogHeader>
+
+          {/* <Form>
+            <form></form>
+          </Form> */}
         </DialogContent>
       </Dialog>
     </div>
