@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useMount from "@/hooks/useMount";
 // import { createPost } from "@/lib/actions";
-// import { CreatePost } from "@/lib/schemas";
+import { CreatePost } from "@/lib/schemas";
 // import { UploadButton } from "@/lib/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -36,6 +36,14 @@ function CreatePage() {
   const isCreatePage = pathname === "/dashboard/create";
   const router = useRouter();
   const mount = useMount();
+  const form = useForm<z.infer<typeof CreatePost>>({
+    resolver: zodResolver(CreatePost),
+    defaultValues: {
+      caption: "",
+      fileUrl: undefined,
+    },
+  });
+  const fileUrl = form.watch("fileUrl");
 
   if (!mount) return null;
 
@@ -50,9 +58,70 @@ function CreatePage() {
             <DialogTitle>Create a new post</DialogTitle>
           </DialogHeader>
 
-          {/* <Form>
-            <form></form>
-          </Form> */}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(async (values) => {
+                console.log(values);
+              })}
+              className="space-y-4"
+            >
+              {!!fileUrl ? (
+                <div className="h-96 md:h-[450px] overflow-hidden rounded-md">
+                  <AspectRatio ratio={1 / 1} className="relative h-full">
+                    <Image
+                      src={fileUrl}
+                      alt="Post Preview"
+                      fill
+                      className="rounded-md object-cover"
+                    />
+                  </AspectRatio>
+                </div>
+              ) : (
+                <FormField
+                  control={form.control}
+                  name="fileUrl"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="picture">Picture</FormLabel>
+                      <FormControl>
+                        {/* <UploadButton>
+
+                            </UploadButton> */}
+                      </FormControl>
+                      <FormDescription>
+                        Upload a picture to post
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              {!!fileUrl && (
+                <FormField
+                  control={form.control}
+                  name="caption"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="caption">Caption</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="caption"
+                          id="caption"
+                          placeholder="Write a caption"
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                Create Post
+              </Button>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </div>
