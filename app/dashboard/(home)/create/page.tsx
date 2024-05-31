@@ -1,5 +1,6 @@
 "use client";
 
+import Error from "@/components/Error";
 // import Error from "@/components/Error";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
@@ -20,10 +21,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useMount from "@/hooks/useMount";
-// import { createPost } from "@/lib/actions";
+import { createPost } from "@/lib/actions";
 import { CreatePost } from "@/lib/schemas";
-// import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton } from "@/lib/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { error } from "console";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -62,6 +64,10 @@ function CreatePage() {
             <form
               onSubmit={form.handleSubmit(async (values) => {
                 console.log(values);
+                const res = await createPost(values);
+                if (res) {
+                  return toast.error(<Error res={res} />);
+                }
               })}
               className="space-y-4"
             >
@@ -84,9 +90,17 @@ function CreatePage() {
                     <FormItem>
                       <FormLabel htmlFor="picture">Picture</FormLabel>
                       <FormControl>
-                        {/* <UploadButton>
-
-                            </UploadButton> */}
+                        <UploadButton
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res) => {
+                            form.setValue("fileUrl", res[0].url);
+                            toast.success("Upload complete");
+                          }}
+                          onUploadError={(error: Error) => {
+                            console.error(error);
+                            toast.error("Upload failed");
+                          }}
+                        ></UploadButton>
                       </FormControl>
                       <FormDescription>
                         Upload a picture to post

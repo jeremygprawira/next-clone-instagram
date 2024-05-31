@@ -61,9 +61,71 @@ model User {
     image         String?
     createdAt     DateTime    @default(now()) @map(name: "created_at")
     updatedAt     DateTime    @updatedAt @map(name: "updated_at")
+    posts         Post[]
+    saved         SavedPost[]
+    likes         Like[]
+    comments      Comment[]
     // jGsmTMcoMTEflsyq
     accounts      Account[]
     sessions      Session[]
 
     @@map(name: "users")
+}
+
+model Post {
+    id            String      @id @default(cuid())
+    createdAt     DateTime    @default(now()) @map(name: "created_at")
+    updatedAt     DateTime    @updatedAt @map(name: "updated_at")
+    caption       String?
+    fileUrl       String      @unique
+    likes         Like[]
+    savedBy       SavedPost[]
+    comments      Comment[]
+    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId        String      @map("user_id")
+
+    @@index([userId])
+}
+
+model SavedPost {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String
+    userId    String   @map("user_id")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([postId, userId])
+    @@index([userId])
+}
+
+model Like {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String
+    userId    String   @map("user_id")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([postId, userId])
+    @@index([userId])
+}
+
+model Comment {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    body      String
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String
+    userId    String   @map("user_id")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([postId])
+    @@index([userId])
 }
