@@ -6,6 +6,8 @@ import Link from "next/link";
 import { PostWithExtras } from "@/lib/definitions";
 import { Card } from "./ui/card";
 import Timestamp from "./Timestamp";
+import PostOptions from "./PostOptions";
+import PostActionBar from "./PostActionBar";
 
 // Async is used bc we use react-server component, not using use client
 async function Post({ post }: { post: PostWithExtras }) {
@@ -33,7 +35,34 @@ async function Post({ post }: { post: PostWithExtras }) {
             </p>
           </div>
         </div>
+        <PostOptions post={post} userId={post.userId} />
       </div>
+
+      <Card className="relative h-[450px] w-full overflow-hidden rounded-none sm:rounded-md">
+        <Image
+          src={post.fileUrl}
+          alt=""
+          fill
+          className="sm:rounded-md object-cover"
+        />
+      </Card>
+
+      <PostActionBar post={post} userId={userId} className="px-3 sm:px-0" />
+
+      {post.caption && (
+        <div className="text-sm leading-none flex items-center space-x-2 font-medium px-3 sm:px-0">
+          <Link href={`/dashboard/${username}`} className="font-bold">
+            {username}
+          </Link>
+          <p>{post.caption}</p>
+
+          {/* <Comments
+            postId={post.id}
+            comments={post.comments}
+            user={session?.user}
+          /> */}
+        </div>
+      )}
     </div>
   );
 }
